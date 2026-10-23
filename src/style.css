@@ -1,0 +1,90 @@
+:root {
+    --bg: #0e0c0b;
+    --panel: #171412;
+    --line: #2a2420;
+    --text: #d8cfc4;
+    --muted: #8a7f74;
+    --accent: #d9722b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: var(--text);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.game {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 48px;
+    width: min(960px, 92vw);
+}
+
+.altar {
+    text-align: center;
+    padding-top: 40px;
+}
+
+.souls {
+    margin: 0;
+    font-size: 2.4rem;
+    color: var(--accent);
+}
+
+.rate {
+    margin: 4px 0 40px;
+    color: var(--muted);
+}
+
+.pumpkin {
+    font-size: 9rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.whisper {
+    margin-top: 32px;
+    min-height: 1.5em;
+    color: var(--muted);
+    font-style: italic;
+}
+
+.shop {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 20px;
+}
+
+.shop h2 {
+    margin: 0 0 16px;
+    font-size: 1.1rem;
+    font-weight: normal;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+#shop-list {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+}
+
+.reset {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 6px 12px;
+    font-family: inherit;
+    cursor: pointer;
+}
