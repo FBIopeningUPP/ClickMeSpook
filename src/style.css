@@ -88,3 +88,30 @@ body {
     font-family: inherit;
     cursor: pointer;
 }
+
+.altar {
+    user-select: none;
+}
+
+.pumpkin {
+    transition: transform 0.05s;
+}
+
+.pumpkin:active {
+    transform: scale(0.94s);
+}
+
+.gain {
+    position: fixed;
+    pointer-events: none;
+    color: var(--accent);
+    transform: translate(-50%, -50%);
+    animation: rise 0.8s ease-out forwards;
+}
+
+@keyframes rise {
+    to {
+        opacity: 0;
+        transform: translate(-50%, -160%);
+    }
+}
