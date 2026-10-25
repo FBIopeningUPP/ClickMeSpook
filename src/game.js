@@ -21,6 +21,49 @@ function ownedCount(up) {
     return state.owned[up.id] || 0;
 }
 
+const SAVE_KEY = "clickmespook-save";
+
+function save() {
+    const data = {
+        souls: state.souls,
+        totalSouls: state.totalSouls,
+        owned: state.owned,
+        savedAt: Date.now(),
+    };
+    try {
+        localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    } catch (err) {
+        console.warn("could not save", err);
+    }
+}
+
+function load() {
+    let data;
+    try {
+        data = JSON.parse(localStorage.getItem(SAVE_KEY));
+    } catch (err) {
+        return 0;
+    }
+    if (!data) return 0;
+
+    state.souls = data.souls || 0;
+    state.totalSouls = data.totalSouls || 0;
+    state.owned = data.owned || {};
+    recalc();
+
+    const seconds = Math.min((Date.now() - data.savedAt) / 1000, 8 * 60 * 60);
+    const earned = Math.floor(state.perSecond * seconds);
+    state.souls += earned;
+    state.totalSouls += earned;
+    return earned;
+}
+
+function reset() {
+    if (!confirm("whipe everything and start over")) return;
+    localStorage.removeItem(SAVE_KEY);
+    location.reload();
+}
+
 function costOf(up) {
     return Math.floor(up.baseCost * Math.pow(1.15, ownedCount(up)));
 }
@@ -101,6 +144,18 @@ setInterval(() => {
     render();
 }, 100);
 
+resetEl.addEventListener("click", reset);
+
+setInterval(save, 5000);
+window.addEventListener("beforeunload", save);
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) save();
+});
+
 buildShop();
 recalc();
+const earned = load();
+if (earned > 0) {
+    whisperEl.textContent = "While you were gone, " + earned + " souls gathered.";
+}
 render();
