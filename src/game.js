@@ -5,6 +5,9 @@ const whisperEl = document.getElementById("whisper");
 const shopListEl = document.getElementById("shop-list");
 const resetEl = document.getElementById("reset");
 
+const shopTitleEl = document.getElementById("shop-title");
+const baseTitle = document.title;
+
 console.log("ClickMeSpook loeaded");
 
 const state = {
@@ -111,7 +114,23 @@ function buildShop() {
     }
 }
 
+let whisperStage = -1;
+
+function updateWhisper() {
+    let stage = 0;
+    for (let i = 0; i < WHISPERS.length; i++) {
+        if (state.totalSouls >= WHISPERS[i].at) stage = i;
+    }
+    if (stage === whisperStage) return;
+
+    whisperStage = stage;
+    whisperEl.textContent = WHISPERS[stage].text;
+    shopTitleEl.textContent = stage >= 4 ? "Feed it" : "Offering";
+    document.body.style.setProperty("--creep", stage / (WHISPERS.length - 1));
+}
+
 function render() {
+    updateWhisper();
     soulCountEl.textContent = Math.floor(state.souls);
     soulRateEl.textContent = state.perSecond;
 
@@ -154,6 +173,7 @@ setInterval(save, 5000);
 window.addEventListener("beforeunload", save);
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) save();
+    document.title = document.hidden && state.totalSouls >= 600 ? "come back" : baseTitle;
 });
 
 buildShop();
