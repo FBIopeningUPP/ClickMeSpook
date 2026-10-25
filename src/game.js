@@ -10,6 +10,7 @@ console.log("ClickMeSpook loeaded");
 const state = {
     souls: 0,
     totalSouls: 0,
+    owned: {},
     clickPower: 1,
     perSecond: 0,
 };
