@@ -116,3 +116,45 @@ body {
         transform: translate(-50%, -160%);
     }
 }
+
+#shop-list li {
+    margin-bottom: 8px;
+}
+
+.upgrade {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    text-align: left;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.upgrade:hover:not(:disabled) {
+    border-color: var(--accent);
+}
+
+.upgrade:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.up-top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.up-cost {
+    color: var(--accent);
+}
+
+.up-desc {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.85rem;
+    color: var(--muted);
+}

@@ -14,9 +14,66 @@ const state = {
     perSecond: 0,
 };
 
+const shopButtons = {};
+
+function ownedCount(up) {
+    return state.owned[up.id] || 0;
+}
+
+function costOf(up) {
+    return Math.floor(up.baseCost * Math.pow(1.15, ownedCount(up)));
+}
+
+function recalc() {
+    state.clickPower = 1;
+    state.perSecond = 0;
+    for (const up of UPGRADES) {
+        const total = up.amount * ownedCount(up);
+        if (up.type === "click") {
+            state.clickPower += total;
+        } else {
+            state.perSecond += total;
+        }
+    }
+}
+
+function buy(up) {
+    const cost = costOf(up);
+    if (state.souls < cost) return;
+
+    state.souls -= cost;
+    state.owned[up.id] = ownedCount(up) + 1;
+    recalc();
+    render();
+}
+
+function buildShop() {
+    for (const up of UPGRADES) {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.className = "upgrade";
+        btn.innerHTML = 
+            '<span class="up-top"><span class="up-name"></span><span class="up-cost"></span></span>' +
+            '<span class="up-desc">' + up.desc + "</span>";
+        btn.addEventListener("click", () => buy(up));
+
+        li.appendChild(btn);
+        shopListEl.appendChild(li);
+        shopButtons[up.id] = btn;
+    }
+}
+
 function render() {
     soulCountEl.textContent = Math.floor(state.souls);
     soulRateEl.textContent = state.perSecond;
+
+    for (const up of UPGRADES) {
+        const btn = shopButtons[up.id];
+        const cost = costOf(up);
+        btn.querySelector(".up-name").textContent = up.name + " (" + ownedCount(up) + ")";
+        btn.querySelector(".up-cost").textContent = cost;
+        btn.disabled = state.souls < cost;
+    }
 }
 
 function showGain(event, amount) {
@@ -33,7 +90,16 @@ pumpkinEl.addEventListener("click", (event) => {
     state.souls += state.clickPower;
     state.totalSouls += state.clickPower;
     showGain(event, state.clickPower);
-    render();
+    render();   
 });
 
+setInterval(() => {
+    const gain = state.perSecond / 10;
+    state.souls += gain;
+    state.totalSouls += gain;
+    render();
+}, 100);
+
+buildShop();
+recalc();
 render();
