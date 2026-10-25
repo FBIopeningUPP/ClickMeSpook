@@ -23,7 +23,10 @@ function ownedCount(up) {
 
 const SAVE_KEY = "clickmespook-save";
 
+let resetting = false;
+
 function save() {
+    if (resetting) return;
     const data = {
         souls: state.souls,
         totalSouls: state.totalSouls,
@@ -60,6 +63,7 @@ function load() {
 
 function reset() {
     if (!confirm("whipe everything and start over")) return;
+    resetting = true;
     localStorage.removeItem(SAVE_KEY);
     location.reload();
 }
